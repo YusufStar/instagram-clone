@@ -1,24 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
+import React ,{ useState } from "react";
+import CustomRouter from "./Router/CustomRouter";
+import { createContext } from "react";
+
+export const InstagramContext = createContext();
 
 function App() {
+  const [loading, setloading] = useState(true)
+  const [user, setuser] = useState(null)
+  const [data, setdata] = useState([])
+  const [language, setlanguage] = useState("English")
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <InstagramContext.Provider value={{loading, setloading, user, setuser, language, setlanguage, data, setdata}}>
+      <CustomRouter />
+    </InstagramContext.Provider>
   );
 }
 
