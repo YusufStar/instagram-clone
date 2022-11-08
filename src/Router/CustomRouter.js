@@ -4,6 +4,7 @@ import { InstagramContext } from '../App';
 import Home from "../pages/Home"
 import Login from "../pages/Login"
 import Loading from "../pages/Loading"
+import Profile from '../pages/Profile';
 
 function CustomRouter() {
     const {user, loading} = useContext(InstagramContext)
@@ -12,6 +13,7 @@ function CustomRouter() {
     <BrowserRouter>
        <Routes>
         <Route path="/" element={loading ? <Loading />:user ? <Home/>:<Login/>}/>
+        <Route path="/profile/:id" element={<Profile />}/>
        </Routes>
     </BrowserRouter>
   )

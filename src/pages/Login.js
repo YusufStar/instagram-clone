@@ -33,14 +33,18 @@ function Login() {
 
   const googlelogin = () => {
     signInWithPopup(auth, provider)
-  .then((result) => {
-    console.log(result)
-    setTimeout(() => {
-      set(ref(database, 'users/' + result.user.uid), {
-        email: result.user.email
-      })
-      setuser(result.user)
-    }, 1000);
+    .then((result) => {
+      setTimeout(() => {
+        const {displayName, photoURL, uid, email} = result.user
+        setuser(result.user)
+        set(ref(database, 'users/' + uid), {
+          email: email,
+          username: displayName,
+          photo: photoURL,
+          uid: uid
+        })
+        setuser(result.user)
+      }, 1000);
   })
   .catch((error) => {
     // Handle Errors here.
@@ -103,19 +107,19 @@ function Login() {
           <div className="w-[350px] h-[575px] flex flex-col justify-between items-center">
             <form onSubmit={(e) => handleSubmit(e)} className='w-[350px] h-[390px] flex flex-col items-center bg-white border-[1.5px] border-[#dbdbdb]'>
             <img draggable="false" src={instagram} className="mb-10 mt-10" alt="Instagram" />
-            <input onChange={(e) => SetEmail(e.target.value)} type="email" required className='outline-none pl-2 login-input w-[70%] h-[35px] bg-[#fafafa] border-[1px] border-[#dbdbdb] rounded-sm mb-1' placeholder='Email address' />
+            <input disabled onChange={(e) => SetEmail(e.target.value)} type="email" required className='outline-none pl-2 login-input w-[70%] h-[35px] bg-[#fafafa] border-[1px] border-[#dbdbdb] rounded-sm mb-1' placeholder='Email address' />
             
             <div className='outline-none relative flex items-center justify-center mt-1 w-[100%] h-[35px]' >
-            <input onChange={(e) => SetPassword(e.target.value)} type={passtext ? "text":"password"} required className='outline-none pl-2 login-input w-[70%] h-[35px] bg-[#fafafa] border-[1px] border-[#dbdbdb] rounded-sm' placeholder='Password' />
+            <input disabled onChange={(e) => SetPassword(e.target.value)} type={passtext ? "text":"password"} required className='outline-none pl-2 login-input w-[70%] h-[35px] bg-[#fafafa] border-[1px] border-[#dbdbdb] rounded-sm' placeholder='Password' />
             <h1 onClick={() => setpasstext(!passtext)} className='absolute cursor-pointer right-16 text-xs text-[#000]/70'>{passtext ? "Hide":"Show"}</h1>
             </div>
 
-            <input type="submit" className='login-input bg-[#0095f6] w-[70%] mt-2 rounded-[5px] text-white cursor-pointer h-[30px] transition-all duration-300 disabled:opacity-50 disabled:cursor-default' value={register ? "Register":"Log in"}/>
+            <input disabled type="submit" className='login-input bg-[#0095f6] w-[70%] mt-2 rounded-[5px] text-white cursor-pointer h-[30px] transition-all duration-300 disabled:opacity-50 disabled:cursor-default' value={register ? "Register":"Log in"}/>
             <div className="w-[70%] relative h-[25px] border-b-[1px] border-b-[#dbdbdb]">
               <h1 className='absolute top-[4px] p-3 rounded-full bg-white flex items-center justify-center text-[#969695] font-bold text-xs left-[40%]'>OR</h1>
             </div>
             <p className='mt-5 hover:underline text-black/70 cursor-pointer'>Forgotten your password?</p>
-              <div className='cursor-pointer w-[90%] h-[45px] flex items-center hover:shadow-md mt-3 hover:scale-[0.99] shadow-sm font-[700] transition-all duration-75 text-[#828282] border-[1px] border-[#E8E8E8] leading-[19.1px] text-[14px] justify-center rounded-[10px] gap-[13px]'>
+              <div onClick={() => googlelogin()} className='cursor-pointer w-[90%] h-[45px] flex items-center hover:shadow-md mt-3 hover:scale-[0.99] shadow-sm font-[700] transition-all duration-75 text-[#828282] border-[1px] border-[#E8E8E8] leading-[19.1px] text-[14px] justify-center rounded-[10px] gap-[13px]'>
                 <FcGoogle className='w-[25px] h-[25px]'/> Continue with Google
               </div>
             </form>
